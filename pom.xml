@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright 2019 Google LLC
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+       http://www.apache.org/licenses/LICENSE-2.0
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example.appengine</groupId>
+  <artifactId>springboot-helloworld-j8</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+
+  <!--
+  The parent pom defines common style checks and testing strategies for our samples.
+  Removing or replacing it should not affect the execution of the samples in anyway.
+  -->
+<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
+<parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.2.6.RELEASE</version>
+</parent>
+
+
+  <properties>
+      <maven.compiler.target>8</maven.compiler.target>
+      <maven.compiler.source>8</maven.compiler.source>
+  </properties>
+
+  <dependencyManagement>
+      <dependencies>
+          <dependency>
+              <!-- Import dependency management from Spring Boot -->
+              <groupId>org.springframework.boot</groupId>
+              <artifactId>spring-boot-dependencies</artifactId>
+              <version>2.2.6.RELEASE</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+
+          <dependency>
+              <groupId>org.springframework.cloud</groupId>
+              <artifactId>spring-cloud-dependencies</artifactId>
+              <version>Hoxton.SR4</version>
+              <type>pom</type>
+              <scope>import</scope>
+          </dependency>
+      </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+  
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web -->
+	<dependency>
+	    <groupId>org.springframework.boot</groupId>
+	    <artifactId>spring-boot-starter-web</artifactId>
+	    <version>2.2.6.RELEASE</version>
+	</dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
+	<dependency>
+	    <groupId>org.apache.tomcat.embed</groupId>
+	    <artifactId>tomcat-embed-jasper</artifactId>
+	    <version>10.0.0-M4</version>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.cloud</groupId>
+		<artifactId>spring-cloud-gcp-starter-sql-postgresql</artifactId>
+	</dependency>
+    
+    <dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-jdbc</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-data-jpa</artifactId>
+	</dependency>
+
+	<dependency>
+		<groupId>org.postgresql</groupId>
+		<artifactId>postgresql</artifactId>
+	</dependency>
+    
+   	<!-- JSTL for JSP -->
+	<dependency>
+		<groupId>javax.servlet</groupId>
+		<artifactId>jstl</artifactId>
+	</dependency>
+
+	<!-- Need this to compile JSP -->
+	<dependency>
+		<groupId>org.apache.tomcat.embed</groupId>
+		<artifactId>tomcat-embed-jasper</artifactId>
+		<scope>provided</scope>
+	</dependency>
+
+	<!-- Need this to compile JSP,
+		tomcat-embed-jasper version is not working, no idea why -->
+	<dependency>
+		<groupId>org.eclipse.jdt.core.compiler</groupId>
+		<artifactId>ecj</artifactId>
+		<version>4.6.1</version>
+		<scope>provided</scope>
+	</dependency>
+
+	<!-- Optional, test for static content, bootstrap CSS-->
+	<dependency>
+		<groupId>org.webjars</groupId>
+		<artifactId>bootstrap</artifactId>
+		<version>3.3.7</version>
+	</dependency>
+		
+  </dependencies>
+
+  <build>
+  	<finalName>springboot-helloworld-j8</finalName>
+    <plugins>
+      <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+          <version>2.2.6.RELEASE</version>
+          <executions>
+              <execution>
+                  <goals>
+                      <goal>repackage</goal>
+                  </goals>
+              </execution>
+          </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        	<artifactId>appengine-maven-plugin</artifactId>
+	        <version>2.2.0</version>
+	        <configuration>
+	          <projectId>GCLOUD_CONFIG</projectId>
+	          <version>springboot-helloworld</version>
+	        </configuration>
+      </plugin>
+    
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+      	</plugin>
+       
+         <!-- Default is too old, update to latest to run the latest Spring 5 + jUnit 5 -->
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-surefire-plugin</artifactId>
+             <version>2.22.0</version>
+         </plugin>
+
+         <!-- Default 2.2 is too old, update to latest -->
+         <plugin>
+             <groupId>org.apache.maven.plugins</groupId>
+             <artifactId>maven-war-plugin</artifactId>
+             <version>3.2.2</version>
+         </plugin>
+            
+    </plugins>
+  </build>
+
+</project>
