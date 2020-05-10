@@ -31,10 +31,11 @@ public class BookController {
 
 	@Autowired
 	private IBookService bookService;
+	Optional<Book> listBook;
 	
 	@GetMapping(value = "/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public Optional<Book> findBookById(@PathVariable("bookId") int bookId) {
-		Optional<Book> listBook = bookService.findBookById(bookId);
+		this.listBook = bookService.findBookById(bookId);
 		return listBook;
 	}
 

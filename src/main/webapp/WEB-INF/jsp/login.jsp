@@ -12,24 +12,30 @@
 		  <a href="books" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;">Books</a>
 	   	  <a href="signup" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;">Sign Up</a>
 	      <a href="login" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;" >Login</a>
+	      <a href="${pageContext.request.contextPath }/logout" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;">Logout</a>
+	      <a href="greet" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;" >My Account</a>
 	      <a href="/" style=" float: right;  display: block;  color: #f2f2f2;  text-align: center;  padding: 14px 16px;  text-decoration: none; font-size: x-large;">Home</a>
 		</div>
    </div>
    
-	<form method="post" modelAttribute="userAccount" action="${pageContext.request.contextPath }/login-user" 
+	<form method="POST" modelAttribute="loginForm"  action="/login-user" 
 	style="display: flex; text-align: left;  left: 35%; right: 35%; width: 70%;   top: 20%;   position: absolute;   height: 500px;  font-size: xxx-large;">
 		<fieldset style="text-align: center; border-radius: 10%; border-color: cornflowerblue;  border-width: 5px;">
 			<legend>Login</legend>
 			${error }
 			<table style="with: 50%; display: flex;  font-size: xx-large; justify-content: center;  margin: 10%;" cellpadding="2" cellspacing="2" >
+			 <spring:bind path="username">
 				<tr>
 					<td>Username</td>
 					<td><input path="username" style="font-size: x-large"/></td>
 				</tr>
+			</spring:bind>
+			<spring:bind path="password">
 				<tr>
 					<td>Password</td>
 					<td><input path="password" style="font-size: x-large"/></td>
 				</tr>
+			</spring:bind>
 				<tr>
 					<td>Remember Me?</td>
 					<td><input type="checkbox" name="remember" value="true"></td>

@@ -17,12 +17,15 @@ public class BookService implements IBookService {
 	@Autowired
 	private IBookRepository bookRepository;
 
+	List<Book> listBook;
+	
 	public Optional<Book> findBookById(int bookId) {
 		return bookRepository.findById(bookId);
 	}
 
 	public List<Book> findAllBooks() {
-		return (List<Book>) bookRepository.findAll();
+		this.listBook = (List<Book>) bookRepository.findAll();
+		return listBook;
 	}
 	
 	public Optional<Book> findBooksByCategoryId(int categoryId) {

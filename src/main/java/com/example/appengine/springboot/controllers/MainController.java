@@ -12,17 +12,23 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.appengine.springboot.entities.Book;
 import com.example.appengine.springboot.entities.UserAccount;
 import com.example.appengine.springboot.services.IBookService;
 import com.example.appengine.springboot.services.IUserService;
 import com.example.appengine.springboot.services.UserService;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 @Controller
 public class MainController {
@@ -68,33 +74,48 @@ public class MainController {
 	}
 	
 	@GetMapping("/signup")
-	public String signup(ModelMap modelMap, HttpSession session, HttpServletRequest request) {
+	public String signupForm(ModelMap modelMap, HttpSession session, HttpServletRequest request) {
+		UserAccount user = new UserAccount();
+		modelMap.addAttribute("user", user);
 		return "signup";
 	}
+	
+	@GetMapping("/welcome")
+	public String greet(ModelMap modelMap, HttpSession session, HttpServletRequest request) {
+		UserAccount user = new UserAccount();
+		modelMap.addAttribute("user", user);
+		return "greet";
+	}
 
-  @PostMapping (value = "/new-user")
-    public String newUser(@ModelAttribute UserAccount user, HttpServletRequest request,HttpServletResponse response) {
-       userService.insertUserAccount(user);
-	return "greet";
+  @RequestMapping (value="/register", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String newUser(@ModelAttribute("registerForm") UserAccount registerForm, HttpServletRequest request,HttpServletResponse response) {
+	   if(request.getParameter("firstName") != null && request.getParameter("lastName") != null && request.getParameter("username") != null && request.getParameter("password") != null) {
+		   UserAccount user = new UserAccount();
+		   user.setFirstName(request.getParameter("firstName"));
+		   user.setLastName(request.getParameter("lastName"));
+		   user.setUsername(request.getParameter("username"));
+		   user.setPassword(request.getParameter("password"));
+	       userService.insertUserAccount(user);
+	       return "greet";
+	   } else {
+		   return "signup";
+	   }
     }
 	
-
-    @PostMapping (value = "/login-user")
-    public String loginUser(@ModelAttribute UserAccount user, HttpServletRequest request,HttpServletResponse response) {
-        if((userService.findUserAccountByUsernameAndPassword(user.getUsername(), user.getPassword())!=null)) {
-            Cookie ckUsername=new Cookie("username", user.getUsername());
+  
+    @RequestMapping (value="/login-user", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    public String loginUser(@ModelAttribute("loginForm") UserAccount loginForm, HttpServletRequest request,HttpServletResponse response) {
+        if(userService.findUserAccountByUsernameAndPassword(request.getParameter("username"), request.getParameter("password")) !=null) {
+            Cookie ckUsername=new Cookie("username", request.getParameter("username"));
             ckUsername.setMaxAge(30*5);
             response.addCookie(ckUsername);
-            Cookie ckPassword = new Cookie("password", user.getPassword());
+            Cookie ckPassword = new Cookie("password",  request.getParameter("password"));
 			ckPassword.setMaxAge(3600);
 			response.addCookie(ckPassword);
-        return "greet";
+			return "greet";
         }
         else {
-            request.setAttribute("error", "Invalid Username or Password");
-            request.setAttribute("mode", "MODE_LOGIN");
             return "login";
-
         }
     }
     
